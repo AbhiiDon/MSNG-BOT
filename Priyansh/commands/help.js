@@ -1,124 +1,129 @@
-module.exports.config = {
-  name: "help",
-  version: "1.0.2",
-  hasPermssion: 0,
-  credits: "Leiam Nash",
-  description: "commands list",
-  commandCategory: "system",
-  usages: "module name",
-  cooldowns: 1,
-  envConfig: {
-    autoUnsend: false,
-    delayUnsend: 300
-  }
-};
+module.exports = {
+	config: {
+		name: "help",
+		version: "1.0",
+		author: "aaayusha",
+		countDown: 5,
+		role: 0,
+		shortDescription: "sarcasm",
+		longDescription: "sarcasm",
+		category: "reply",
+	},
+	onStart: async function(){}, 
+	onChat: async function({
+		event,
+		message,
+		getLang
+	}) {
+		// Define the prefixes you want to use
+		const prefixes = [".", "#", "*"];
 
-module.exports.languages = {
-  "en": {
-    "moduleInfo": "─────[ %1 ]──────\n\nUsage: %3\nCategory: %4\nWaiting time: %5 seconds(s)\nPermission: %6\nDescription: %2\n\nModule coded by %7",
-    "helpList": '[ There are %1 commands on this bot, Use: "%2help nameCommand" to know how to use! ]',
-    "user": "User",
-        "adminGroup": "Admin group",
-        "adminBot": "Admin bot"
-  }
-};
-
-module.exports.handleEvent = function ({ api, event, getText }) {
-  const { commands } = global.client;
-  const { threadID, messageID, body } = event;
-
-  if (!body || typeof body == "undefined" || body.indexOf("help") != 0) return;
-  const splitBody = body.slice(body.indexOf("help")).trim().split(/\s+/);
-  if (splitBody.length == 1 || !commands.has(splitBody[1].toLowerCase())) return;
-  const threadSetting = global.data.threadData.get(parseInt(threadID)) || {};
-  const command = commands.get(splitBody[1].toLowerCase());
-  const prefix = (threadSetting.hasOwnProperty("PREFIX")) ? threadSetting.PREFIX : global.config.PREFIX;
-  return api.sendMessage(getText("moduleInfo", command.config.name, command.config.description, `${prefix}${command.config.name} ${(command.config.usages) ? command.config.usages : ""}`, command.config.commandCategory, command.config.cooldowns, ((command.config.hasPermssion == 0) ? getText("user") : (command.config.hasPermssion == 1) ? getText("adminGroup") : getText("adminBot")), command.config.credits), threadID, messageID);
-}
-
-module.exports. run = function({ api, event, args, getText }) {
-  const axios = require("axios");
-  const request = require('request');
-  const fs = require("fs-extra");
-  const { commands } = global.client;
-  const { threadID, messageID } = event;
-  const command = commands.get((args[0] || "").toLowerCase());
-  const threadSetting = global.data.threadData.get(parseInt(threadID)) || {};
-  const { autoUnsend, delayUnsend } = global.configModule[this.config.name];
-  const prefix = (threadSetting.hasOwnProperty("PREFIX")) ? threadSetting.PREFIX : global.config.PREFIX;
-if (args[0] == "all") {
-    const command = commands.values();
-    var group = [], msg = "";
-    for (const commandConfig of command) {
-      if (!group.some(item => item.group.toLowerCase() == commandConfig.config.commandCategory.toLowerCase())) group.push({ group: commandConfig.config.commandCategory.toLowerCase(), cmds: [commandConfig.config.name] });
-      else group.find(item => item.group.toLowerCase() == commandConfig.config.commandCategory.toLowerCase()).cmds.push(commandConfig.config.name);
-    }
-    group.forEach(commandGroup => msg += `☂︎ ${commandGroup.group.charAt(0).toUpperCase() + commandGroup.group.slice(1)} \n${commandGroup.cmds.join(' • ')}\n\n`);
-
-    return axios.get('https://apikanna.maduka9.repl.co').then(res => {
-    let ext = res.data.data.substring(res.data.data.lastIndexOf(".") + 1);
-      let admID = "100022944679426";
-
-      api.getUserInfo(parseInt(admID), (err, data) => {
-      if(err){ return console.log(err)}
-     var obj = Object.keys(data);
-    var firstname = data[obj].name.replace("@", "");
-    let callback = function () {
-        api.sendMessage({ body:`𝗖𝗼𝗺𝗺𝗮𝗻𝗱 𝗟𝗶𝘀𝘁\n\n` + msg + `\nSpamming the bot are strictly prohibited\n\nTotal Commands: ${commands.size}\n\nFor All Cmds Type help2\n\nDeveloper:\n「 𓆩⃝ABHI DON 」`, mentions: [{
-                           tag: firstname,
-                           id: admID,
-                           fromIndex: 0,
-                 }],
-            attachment: fs.createReadStream(__dirname + `/cache/472.${ext}`)
-        }, event.threadID, (err, info) => {
-        fs.unlinkSync(__dirname + `/cache/472.${ext}`);
-        if (autoUnsend == false) {
-            setTimeout(() => { 
-                return api.unsendMessage(info.messageID);
-            }, delayUnsend * 1000);
-        }
-        else return;
-    }, event.messageID);
-        }
-         request(res.data.data).pipe(fs.createWriteStream(__dirname + `/cache/472.${ext}`)).on("close", callback);
-     })
-      })
-};
-  if (!command) {
-    const arrayInfo = [];
-    const page = parseInt(args[0]) || 1;
-    const numberOfOnePage = 10;
-    let i = 0;
-    let msg = "";
-
-    for (var [name, value] of (commands)) {
-      name += ``;
-      arrayInfo.push(name);
-    }
-
-    arrayInfo.sort((a, b) => a.data - b.data);
-
-const first = numberOfOnePage * page - numberOfOnePage;
-    i = first;
-    const helpView = arrayInfo.slice(first, first + numberOfOnePage);
-
-
-    for (let cmds of helpView) msg += `「 ${++i} 」${global.config.PREFIX}${cmds}\n`;
-
-    const siu = `★𝗖𝗼𝗺𝗺𝗮𝗻𝗱 𝗟𝗶𝘀𝘁★\n━━━━━━━━━━━━━━━━`;
-
- const text = `\n𝐏𝐀𝐆𝐄 (${page}/${Math.ceil(arrayInfo.length/numberOfOnePage)})\nFor All Cmds Type Help2\n━━━━━━━━━━━━━━━━\n「 𝗔𝗕𝗛𝗜 𝗕𝗥𝗔𝗡𝗗 𓆩🐥💜𓆪 」`;
-    var link = [
-"https://imgur.com/a/t4irD1h"
-      ]
-     var callback = () => api.sendMessage({ body: siu + "\n\n" + msg  + text, attachment: fs.createReadStream(__dirname + "/cache/leiamnashelp.jpg")}, event.threadID, () => fs.unlinkSync(__dirname + "/cache/leiamnashelp.jpg"), event.messageID);
-    return request(encodeURI(link[Math.floor(Math.random() * link.length)])).pipe(fs.createWriteStream(__dirname + "/cache/leiamnashelp.jpg")).on("close", () => callback());
-  } 
-const leiamname = getText("moduleInfo", command.config.name, command.config.description, `${(command.config.usages) ? command.config.usages : ""}`, command.config.commandCategory, command.config.cooldowns, ((command.config.hasPermssion == 0) ? getText("user") : (command.config.hasPermssion == 1) ? getText("adminGroup") : getText("adminBot")), command.config.credits);
-
-  var link = [ "https://imgur.com/a/t4irD1h", 
-  "https://imgur.com/a/t4irD1h"
-  ]
-    var callback = () => api.sendMessage({ body: leiamname, attachment: fs.createReadStream(__dirname + "/cache/leiamnashelp.jpg")}, event.threadID, () => fs.unlinkSync(__dirname + "/cache/leiamnashelp.jpg"), event.messageID);
-    return request(encodeURI(link[Math.floor(Math.random() * link.length)])).pipe(fs.createWriteStream(__dirname + "/cache/leiamnashelp.jpg")).on("close", () => callback());
+		// Check if the message starts with any of the defined prefixes followed by "hahaha"
+		if (event.body) {
+			const messageText = event.body.toLowerCase();
+			if (prefixes.some(prefix => messageText.startsWith(prefix + "help"))) {
+				message.reply(`
+__________________________
+| ❤️ »  Bot Commands!!
+|•「 1  」 » Animevid       
+|•「 2  」 » Animevideo     
+|•「 3  」 » Anipic         
+|•「 4  」 » Aniquote       
+|•「 5  」 » Aniquotes      
+|•「 6  」 » Anivoice       
+|•「 7  」 » Aniwatch       
+|•「 8  」 » Anjara         
+|•「 9  」 » Approved2 
+|•「 10 」 » Anya1
+|•「 11 」 » Antiout       
+|•「 12 」 » Anya          
+|•「 13 」 » Anya2         
+|•「 14 」 » Anya3         
+|•「 15 」 » Apimarket     
+|•「 16 」 » Approved      
+|•「 17 」 » Appstate      
+|•「 18 」 » Appstore      
+|•「 19 」 » Arrest        
+|•「 20 」 » Art           
+|•「 21 」 » Art2          
+|•「 22 」 » Ashley        
+|•「 23 」 » Aa            
+|•「 24 」 » Accept        
+|•「 25 」 » Adboxonly     
+|•「 26 」 » Adduser       
+|•「 27 」 » Admin         
+|•「 28 」 » Adminassist   
+|•「 29 」 » Adminonly     
+|•「 30 」 » Ads           
+|•「 31 」 » Advice        
+|•「 32 」 » Usage         
+|•「 33 」 » Ai            
+|•「 34 」 » Alienrizz     
+|•「 35 」 » All           
+|•「 36 」 » Amazonsearch  
+|•「 37 」 » Aniblur       
+|•「 38 」 » Aniedit       
+|•「 39 」 » Aniedit2      
+|•「 40 」 » Anigen        
+|•「 41 」 » Animagine     
+|•「 42 」 » Animefy       
+|•「 43 」 » Animeinfo     
+|•「 44 」 » Animeme       
+|•「 45 」 » Autolink      
+|•「 46 」 » Autoseen      
+|•「 47 」 » Autosetname   
+|•「 48 」 » Autotik       
+|•「 49 」 » Avatar        
+|•「 50 」 » Axix(song)    
+|•「 51 」 » Backupdata    
+|•「 52 」 » Backupmongo   
+|•「 53 」 » Badwords      
+|•「 54 」 » Balance       
+|•「 55 」 » Balancetop    
+|•「 56 」 » Ball          
+|•「 57 」 » Ban           
+|•「 58 」 » Bank          
+|•「 59 」 » Banlist       
+|•「 60 」 » Bb            
+|•「 61 」 » Bday          
+|•「 62 」 » Beauty        
+|•「 63 」 » Beluga        
+|•「 64 」 » Berojgar      
+|•「 65 」 » Besh          
+|•「 66 」 » Beshy         
+|•「 67 」 » Bin           
+|•「 68 」 » Binary        
+|•「 69 」 » Bine          
+|•「 70 」 » Bio           
+|•「 71 」 » Bishwo        
+|•「 72 」 » Bitly         
+|•「 73 」 » Block         
+|•「 74 」 » Blowjob       
+|•「 75 」 » Blue          
+|•「 76 」 » Bored         
+|•「 77 」 » Botgc         
+|•「 78 」 » Botnick       
+|•「 79 」 » Botsay        
+|•「 80 」 » Botstats      
+|•「 81 」 » Busy          
+|•「 82 」 » Buttslap      
+|•「 83 」 » Calculate     
+|•「 84 」 » Callad        
+|•「 85 」 » Candycrush    
+|•「 86 」 » Cardinfo      
+|•「 87 」 » Cat           
+|•「 88 」 » Cardinfo2     
+---------------------------
+» Abhi's Botwa 🐥💜
+» Admin Protected🛡️
+» Don't Spam Command⚔️
+» Be Friendly With Bot🔰
+» 10/4 Hrs Active/Day🛠️
+• Bot Have 415 Comands📇
+• Do Help|Pages To See All
+  
+				`);
+			}
+		}
+	}
 };
