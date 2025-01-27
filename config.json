@@ -16,13 +16,13 @@
     "EMAIL": "",
     "PASSWORD": "",
     "OTPKEY": "",
-    "BOTNAME": "No Option",
-    "PREFIX": "+",
+    "BOTNAME": "Abhi's Bot 🐥🐥",
+    "PREFIX": ".",
     "ADMINBOT": [
-        "61565513061548"
+        "61570821622783"
     ],
     "NDH": [
-        "61565513061548"
+        "61570821622783"
     ],
     "DATABASE": {
         "sqlite": {
