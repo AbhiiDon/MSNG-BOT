@@ -13,7 +13,7 @@ module.exports.config = {
 module.exports.handleEvent = function({ api, event, client, __GLOBAL }) {
 	var { threadID, messageID } = event;
 	let react = event.body.toLowerCase();
-	if(react.includes("prefix") ||
+	if(react.includes("Owner") ||
      react.includes("Abhi") || 
 react.includes("owner")) {
 		var msg = {
