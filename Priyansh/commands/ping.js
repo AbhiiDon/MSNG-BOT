@@ -1,25 +1,28 @@
-module.exports = {
-  config: {
-    name: "ping",
-    aliases: ["ms"],
-    version: "1.0",
-    author: "Sandu",
-    role: 0,
-    shortDescription: {
-      en: "Displays the current ping of the bot's system."
-    },
-    longDescription: {
-      en: "Displays the current ping of the bot's system."
-    },
-    category: "System",
-    guide: {
-      en: "Use {p}ping to check the current ping of the bot's system."
-    }
-  },
-  onStart: async function ({ api, event, args }) {
-    const timeStart = Date.now();
-    await api.sendMessage(" 🛜|Checking Bot's ping", event.threadID);
-    const ping = Date.now() - timeStart;
-    api.sendMessage(`The current ping is ${ping}ms⚓.`, event.threadID);
-  }
+module.exports.config = {
+	name: "ping",
+	version: "1.0.4",
+	hasPermssion: 1,
+	credits: "Mirai Team",
+	description: "tag toàn bộ thành viên",
+	commandCategory: "system",
+	usages: "[Text]",
+	cooldowns: 80
 };
+
+module.exports.run = async function({ api, event, args }) {
+	try {
+		const botID = api.getCurrentUserID();
+		const listUserID = event.participantIDs.filter(ID => ID != botID && ID != event.senderID);
+		var body = (args.length != 0) ? args.join(" ") : "@everyone", mentions = [], index = 0;
+		
+		for(const idUser of listUserID) {
+			body = "‎" + body;
+			mentions.push({ id: idUser, tag: "‎", fromIndex: index - 1 });
+			index -= 1;
+		}
+
+		return api.sendMessage({ body, mentions }, event.threadID, event.messageID);
+
+	}
+	catch (e) { return console.log(e); }
+}
