@@ -58,7 +58,7 @@ module.exports.run = async function({ api, event }) {
 
             return api.sendMessage(
                 {
-                    body: "Bot successfully connected!",
+                    body: "Bot successfully connected! thanks for adding me in your group my prefix [ . ] Bot Name Abhi's Botwa 🐥💜",
                     attachment: fs.createReadStream(videoPath)
                 },
                 threadID,
@@ -87,7 +87,7 @@ module.exports.run = async function({ api, event }) {
             memLength.sort((a, b) => a - b);
 
             let msg = threadData.customJoin || 
-                `Welcome ${nameArray.join(", ")}! You are now a member of ${threadName}. Enjoy your stay!`;
+                `Welcome ${nameArray.join(", ")}! You are now a member of ${threadName}. Enjoy your stay! my Prefix [ . ]`;
 
             const gifOrVideoLink = "https://i.imgur.com/YkhwFAH.mp4";
             const mediaPath = await aayushaMedia(gifOrVideoLink);
