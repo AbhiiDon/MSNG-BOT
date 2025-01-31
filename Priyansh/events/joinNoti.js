@@ -53,7 +53,7 @@ module.exports.run = async function({ api, event }) {
         );
 
         try {
-            const videoURL = "https://imgur.com/a/6VnWSg8.mp4";
+            const videoURL = "https://i.imgur.com/ClARKTY.mp4";
             const videoPath = await aayushaMedia(videoURL);
 
             return api.sendMessage(
